@@ -1,4 +1,4 @@
-﻿//+------------------------------------------------------------------+
+//+------------------------------------------------------------------+
 //|                                                 TradingPanel.mqh |
 //|             Copyright 2018, Kashu Yamazaki, All Rights Reserved. |
 //|                                      https://Kashu7100.github.io |
@@ -6,10 +6,10 @@
 #property copyright "Copyright 2018, Kashu"
 #property strict
 
-#include <Controls\Dialog.mqh>
-#include <Controls\Label.mqh>
-#include <Controls\Button.mqh>
-#include <Controls\ComboBox.mqh>
+#include <Controls/Dialog.mqh>
+#include <Controls/Label.mqh>
+#include <Controls/Button.mqh>
+#include <Controls/ComboBox.mqh>
 #include <TradingAgent.mqh>
 
 #resource "\\Include\\Controls\\res\\CheckBoxOn.bmp"
@@ -25,11 +25,11 @@ enum ENUM_LABEL_ALIGN{
 
 class TradingPanel:public CAppDialog{
    public:
-      void TradingPanel(int accountNum,ENUM_POSITION_HANDLING position_handling=LONG_SHORT, bool autoTrailing=true, double startSL=15, 
-                           double basic_SLwidth=10, double risk=4, double SL=15, double TP=30);
-      void ~TradingPanel();
-      bool Init(int accountNum,ENUM_POSITION_HANDLING position_handling=LONG_SHORT,bool autoTrailing=true,double startSL=15.000000,
-                   double basic_SLwidth=10.000000,double risk=4, double SL=15, double TP=30);
+      TradingPanel(long accountNum, long magic=12345, bool magicFilter=false, bool symbolFilter=false, ENUM_POSITION_HANDLING position_handling=LONG_SHORT, bool autoTrailing=true, double startSL=15, 
+                            double basic_SLwidth=10, double risk=4, double sl=15, double tp=30);
+      virtual ~TradingPanel();
+      bool Init(long accountNum, long magic=12345, bool magicFilter=false, bool symbolFilter=false, ENUM_POSITION_HANDLING position_handling=LONG_SHORT,bool autoTrailing=true,double startSL=15.000000,
+                    double basic_SLwidth=10.000000,double risk=4, double sl=15, double tp=30);
       
       virtual bool Create(const string name, const int x1=5,const int y1=20,const int x2=320,const int y2=420);
       virtual void Update(void);
@@ -113,21 +113,21 @@ class TradingPanel:public CAppDialog{
       #define  BORDER   (int)(ClientAreaHeight()/24)        // distance betwine boder and elements
 };
 
-TradingPanel::TradingPanel(int accountNum,ENUM_POSITION_HANDLING position_handling=LONG_SHORT, bool autoTrailing=true, double startSL=15, 
-                           double basic_SLwidth=10, double risk=4, double sl=15, double tp=30){
+TradingPanel::TradingPanel(long accountNum, long magic, bool magicFilter, bool symbolFilter, ENUM_POSITION_HANDLING position_handling, bool autoTrailing, double startSL, 
+                             double basic_SLwidth, double risk, double sl, double tp){
    mSL = sl;
    mTP = tp;
-   mTA.Init(accountNum, "", 12345, NONE, LONG_AND_SHORT, position_handling, true, 0.01, autoTrailing, startSL, basic_SLwidth, risk, 0, 0);
+   mTA.Init(accountNum, "", magic, magicFilter, symbolFilter, NONE, LONG_AND_SHORT, position_handling, true, 0.01, autoTrailing, startSL, basic_SLwidth, risk, 0, 0);
 }
 
 TradingPanel::~TradingPanel(void){
 }
 
-bool TradingPanel::Init(int accountNum,ENUM_POSITION_HANDLING position_handling=LONG_SHORT,bool autoTrailing=true,double startSL=15.000000,
-                   double basic_SLwidth=10.000000,double risk=4, double sl=15, double tp=30){
+bool TradingPanel::Init(long accountNum, long magic=12345, bool magicFilter=false, bool symbolFilter=false, ENUM_POSITION_HANDLING position_handling=LONG_SHORT,bool autoTrailing=true,double startSL=15.000000,
+                    double basic_SLwidth=10.000000,double risk=4, double sl=15, double tp=30){
    mSL = sl;
    mTP = tp;
-   return mTA.Init(accountNum, "", 12345, NONE, LONG_AND_SHORT, position_handling, true, 0.01, autoTrailing, startSL, basic_SLwidth, risk, 0, 0);             
+   return mTA.Init(accountNum, "", magic, magicFilter, symbolFilter, NONE, LONG_AND_SHORT, position_handling, true, 0.01, autoTrailing, startSL, basic_SLwidth, risk, 0, 0);             
 }
 
 bool TradingPanel::Create(const string name, const int x1=5,const int y1=20,const int x2=320,const int y2=420){
